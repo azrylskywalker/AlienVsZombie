@@ -1,11 +1,21 @@
 // ********************************************************* 
 // Course: TCP1101 PROGRAMMING FUNDAMENTALS 
 // Year: Trimester 1, 2022/23 (T2215) 
+<<<<<<< HEAD
 // Lab: TT8L 
 // Names: AISYAH BINTI AHMAD KASSIM | ALIA MAISARA BINTI SHAHRIN | AZRYL SHAMIN BIN AZRIZAL 
 // IDs: 1211101007 | 1211104237 | 1211103145 
 // Emails: 1211101007@student.mmu.edu.my | 1211104237@student.mmu.edu.my | 1211103145@student.mmu.edu.my 
 // Phones: 0197345509 | MEMBER_PHONE_2 | MEMBER_PHONE_3 
+=======
+
+// Lab: TxxL 
+// Names: AISYAH BINTI AHMAD KASSIM | MEMBER_NAME_2 | MEMBER_NAME_3 
+// IDs: MEMBER_ID_1 | MEMBER_ID_2 | MEMBER_ID_3 
+// Emails: MEMBER_EMAIL_1 | MEMBER_EMAIL_2 | MEMBER_EMAIL_3 
+// Phones: MEMBER_PHONE_1 | MEMBER_PHONE_2 | MEMBER_PHONE_3 
+
+>>>>>>> 9aec456a3b7ead70c4c557041995f38fb1389b08
 // ********************************************************* 
 
 // TODO: Fill in the missing information above and delete this line.
