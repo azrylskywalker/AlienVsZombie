@@ -11,6 +11,7 @@
 #include "pf/helper.h"
 #include <iostream>
 #include <vector>
+#include <random>
 #include <iomanip>
 
 using namespace std;
@@ -35,6 +36,9 @@ public:
         char objects[] = {'h', 'p', 'r', '>', '<', '^', 'v', ' ', ' ', ' '};
         int noOfObjects = 10;
 
+        static random_device device;
+        uniform_int_distribution<int> random(0, noOfObjects-1);
+
         boardsize_.resize(row_);
         for (int i = 0; i < row_; ++i){
             boardsize_[i].resize(column_);
@@ -42,7 +46,7 @@ public:
 
         for (int i = 0; i < row_; ++i){
             for (int j = 0; j < column_; ++j){
-                int objNo = rand() % noOfObjects;
+                int objNo = random(device);
                 boardsize_[i][j] = objects[objNo];
             }
         }
