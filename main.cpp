@@ -15,15 +15,6 @@
 
 using namespace std;
 
-void displayMenu();
-void showGameSettings(const int &rows, const int &columns, const int &zombies);
-void changeGameSettings(int &rows, int &columns, int &zombies);
-void createGameBoard(const int &boardColumns, const int &boardRows);
-void startGame(const int &boardColumns, const int &boardRows, const int &numOfzZombies);
-void gameDashboard();
-void gameControl();
-void commandHelp();
-
 
 class Board{
 private:
@@ -161,15 +152,47 @@ public:
         playingBoard.setObject(x_, y_, heading_);
     }
 
-    void move(const string &input){
-        int oldPosX = x_;
-        int oldPosY = y_;
+    void move(const string &input,Board &playingBoard){
+        char trail = '.';
+        if (input == "up"){
+            while(playingBoard.isEmpty((x_ + 1), y_)){
+                int oldPosX = x_;
+                int oldPosY = y_;
+                y_++;
+                playingBoard.setObject(x_, y_, heading_);
+                playingBoard.setObject(oldPosX, oldPosY, trail);
+                }  
+        }else if (input == "down"){
+            while(playingBoard.isEmpty((x_ - 1), y_)){
+                int oldPosX = x_;
+                int oldPosY = y_;
+                y_--;
 
-        
-        
-    }
+                playingBoard.setObject(x_, y_, heading_);
+                playingBoard.setObject(oldPosX, oldPosY, trail);
+            }
+        }else if (input == "left"){
+            while(playingBoard.isEmpty((x_ - 1), y_)){
+                int oldPosX = x_;
+                int oldPosY = y_;
+                x_--;
 
+                playingBoard.setObject(x_, y_, heading_);
+                playingBoard.setObject(oldPosX, oldPosY, trail);
+            }
+        }else if(input == "right"){
+            while(playingBoard.isEmpty((x_ + 1), y_)){
+                int oldPosX = x_;
+                int oldPosY = y_;
 
+                x_++;
+                playingBoard.setObject(x_, y_, heading_);
+                playingBoard.setObject(oldPosX, oldPosY, trail);
+
+            }
+        }
+            
+    }   
 };
 
 class Zombie{
@@ -181,6 +204,16 @@ public:
     //TODO : getY(), getX(), move(), and else
 };
 
+void displayMenu();
+void showGameSettings(const int &rows, const int &columns, const int &zombies);
+void changeGameSettings(int &rows, int &columns, int &zombies);
+void startGame(const int &boardColumns, const int &boardRows, const int &numOfzZombies);
+void gameDashboard();
+void gameControl(Alien &player, Board &playingBoard);
+void commandHelp();
+
+
+
 
 int main(){
     cout << "Assignment (Part 1)" << endl;
@@ -189,6 +222,7 @@ int main(){
     char choice;
     int numOfRows{3}, numOfColumns{19}, numOfZombies{1};
     bool done{0};
+    Alien player;
 
     //TODO : once finished, create a proper randomnizer
 
@@ -276,33 +310,37 @@ void changeGameSettings(int &rows, int &columns, int &zombies){
     cin >> zombies;
 }
 
-void createGameBoard(const int &boardColumns, const int &boardRows){
-    Board playingBoard = Board(boardColumns, boardRows);
-    Alien player;
-
-    player.initPos(playingBoard);
-    playingBoard.display();
-}
 
 void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies){
-    createGameBoard(boardColumns, boardRows);
-    //gameDashboard()
-    gameControl();
+    Board playingBoard = Board(boardColumns, boardRows);
+    
+    Alien player;
+    player.initPos(playingBoard);
 
+    while (true){
+        
+        playingBoard.display();
+         //gameDashboard()
+        gameControl(player, playingBoard);
+    }
+    
 }
+   
+
+
 
 void gameDashboard(){
     // This function display the status of entity on the board
 
 }
 
-void gameControl(){
+void gameControl(Alien &player, Board &playingBoard){
     string userInput;
     cout << "Command> ";
     cin >> userInput;
 
     if(userInput == "up" || "down" || "left" || "right"){
-        cout << "allowed!";
+        player.move(userInput, playingBoard);
     }else if(userInput == "arrow"){
         
     }else if(userInput == "help"){
