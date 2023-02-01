@@ -16,7 +16,7 @@ List all the features completed.
 
 ### To Do
 
-List all the features not yet done. Remove this section if there is no incomplete requirements.
+List all the features not yet done.
 
 1. Let the Alien interact with objects on the board.
 2. Zombies.
