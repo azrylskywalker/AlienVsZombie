@@ -123,15 +123,17 @@ public:
     }
 
     bool isInsideMap(int x, int y){
-        return !isspace(boardsize_[-(y - row_)][x - 1]);
+        return (x > 0 && x <= column_ && y > 0 && y <= row_);
     }
 
+    
 };
 
 class Alien{
 private:
     int life_ {100}, attack_ {0}, x_, y_;
-    char heading_ {'A'};
+    char heading_ {'A'}, trail_ {'.'};
+    bool turns_ {1};
 
 public:
     Alien(){};
@@ -155,48 +157,179 @@ public:
 
         playingBoard.setObject(x_, y_, heading_);
     }
-
+   
     void move(const string &input,Board &playingBoard){
-        char trail = '.';
         if (input == "up"){
-            while(playingBoard.isEmpty((x_ + 1), y_)){
-                int oldPosX = x_;
-                int oldPosY = y_;
-                y_++;
-                playingBoard.setObject(x_, y_, heading_);
-                playingBoard.setObject(oldPosX, oldPosY, trail);
-                }  
+            moveUp(playingBoard);
         }else if (input == "down"){
-            while(playingBoard.isEmpty((x_ - 1), y_)){
-                int oldPosX = x_;
-                int oldPosY = y_;
-                y_--;
-
-                playingBoard.setObject(x_, y_, heading_);
-                playingBoard.setObject(oldPosX, oldPosY, trail);
-            }
+            moveDown(playingBoard);
         }else if (input == "left"){
-            while(playingBoard.isEmpty((x_ - 1), y_)){
-                int oldPosX = x_;
-                int oldPosY = y_;
-                x_--;
-
-                playingBoard.setObject(x_, y_, heading_);
-                playingBoard.setObject(oldPosX, oldPosY, trail);
-            }
+            moveLeft(playingBoard);
         }else if(input == "right"){
-            while(playingBoard.isEmpty((x_ + 1), y_)){
-                int oldPosX = x_;
-                int oldPosY = y_;
+            moveRight(playingBoard);
+        }
+    }
 
-                x_++;
-                playingBoard.setObject(x_, y_, heading_);
-                playingBoard.setObject(oldPosX, oldPosY, trail);
+    void moveStep(int &oldPosX, int &oldPosY, Board &playingBoard){
+        playingBoard.setObject(x_, y_, heading_);
+        playingBoard.setObject(oldPosX, oldPosY, trail_);
+        playingBoard.display();
+    }
 
+    void moveUp(Board &playingBoard){
+        while (turns_){
+            int oldPosX {x_}, oldPosY {y_};
+            int newposX {x_}, newPosY {y_ + 1};
+
+            moveObstacles(playingBoard, newposX, newPosY);
+
+            if (turns_){
+                y_++;
+                moveStep(oldPosX, oldPosY, playingBoard);
             }
         }
+    }
+
+    void moveDown(Board &playingBoard){
+        while (turns_){
+            int oldPosX {x_}, oldPosY {y_};
+            int newposX {x_}, newPosY {y_ - 1};
+
+            moveObstacles(playingBoard, newposX, newPosY);
+
+            if (turns_){
+                y_--;
+                moveStep(oldPosX, oldPosY, playingBoard);
+            }
+        }
+    }
+
+    void moveLeft(Board &playingBoard){
+        while (turns_){
+            int oldPosX {x_}, oldPosY {y_};
+            int newposX {x_ - 1}, newPosY {y_};
+
+            moveObstacles(playingBoard, newposX, newPosY);
             
-    }   
+            if(turns_){
+                x_--;
+                moveStep(oldPosX, oldPosY, playingBoard);
+            }
+        }
+    }
+
+    void moveRight(Board &playingBoard){
+        while (turns_){
+            int oldPosX {x_}, oldPosY {y_};
+            int newposX {x_ + 1}, newPosY {y_};
+
+            moveObstacles(playingBoard, newposX, newPosY);
+
+            if(turns_){
+                x_++;
+                moveStep(oldPosX, oldPosY, playingBoard);
+            }
+        }
+    }
+
+    void moveObstacles(Board &playingBoard, int &newposX, int &newPosY){
+        if (playingBoard.getObject(newposX, newPosY) == 'h'){ 
+            healthObstacles();
+        }else if(playingBoard.getObject(newposX, newPosY) == 'p'){
+            podObstacles();
+        }else if (playingBoard.getObject(newposX, newPosY) == 'r'){
+            rockObstacles(playingBoard, newposX, newPosY);
+        }else if(!playingBoard.isInsideMap(newposX, newPosY)){
+            borderObstacles();
+        }else if (playingBoard.getObject(x_, y_+1) == '>' || '<' || '^' || 'v'){
+            moveArrow(playingBoard, newposX, newPosY);
+        }else if(isdigit(playingBoard.getObject(x_, y_+1))){
+            attack(playingBoard, newposX, newPosY);
+        }
+    }
+
+    void healthObstacles(){
+        cout << "Alien finds a health pack.\n";
+        cout << "Alien's life is increased by 20\n";
+
+        life_ += 20;
+
+        system("pause");
+    }
+
+    void podObstacles(){
+        system("pause");
+    }
+
+    void rockObstacles(Board &playingBoard, int &x, int y){
+        cout << "Alien stumbles upon a rock\n";
+
+        char objects[] = {'h', 'p', ' ', '>', '<', '^', 'v', ' ', ' ', ' '};
+        int noOfObjects = 10;
+
+        static random_device device;
+        uniform_int_distribution<int> random(0, noOfObjects-1);
+
+        char newObj = objects[random(device)];
+
+        switch (newObj){
+        case 'h':
+            cout << "Alien discovers a health pack beneath the rock.\n";
+            break;
+        case 'p':
+            cout << "Alien discovers a pod beneath the rock.\n";
+            break;
+        case '>':
+        case '<':
+        case '^':
+        case 'v':
+            cout << "Alien discovers an arrow beneath the rock.\n";
+            break;
+        default:
+            cout << "Alien discovers nothing beneath the rock.\n";
+            break;
+        }
+        playingBoard.setObject(x, y, newObj);
+        system("pause");
+
+        turns_ = 0;
+    }
+
+    void borderObstacles(){
+        cout << "Alien hits a border.\n";
+        system("pause");
+
+        turns_ = 0;
+    }
+
+    void moveArrow(Board &playingBoard, int &newX, int &newY){
+        cout << "Alien finds an arrow\n";
+        cout << "Alien's attack is increase by 20\n";
+
+        attack_ += 20;
+
+        char arrowObj = playingBoard.getObject(newX, newY);
+
+        switch (arrowObj)
+        {
+        case '>':
+            moveRight(playingBoard);
+            break;
+        case 'v':
+            moveDown(playingBoard);
+            break;
+        case '<':
+            moveLeft(playingBoard);
+            break;
+        case '^':
+            moveUp(playingBoard);
+            break;
+        }
+    }
+
+    void attack(Board &playingBoard, int &newX, int &newY){
+        
+    }
 };
 
 class Zombie{
@@ -219,6 +352,7 @@ void commandHelp();
 
 
 
+
 int main(){
     cout << "Assignment (Part 1)" << endl;
     cout << "Let's Get Started!" << endl;
@@ -228,10 +362,10 @@ int main(){
     bool done{0};
     Alien player;
 
-    //TODO : once finished, create a proper randomnizer
 
     displayMenu();
     cin >> choice;
+    
     switch (choice)
     {
     case '1':
@@ -253,7 +387,6 @@ int main(){
         break;
     }
     system("pause");
-    // CreateGameBoard();
 }
 
 void displayMenu(){
@@ -326,6 +459,7 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
         playingBoard.display();
          //gameDashboard()
         gameControl(player, playingBoard);
+
     }
     
 }
@@ -345,19 +479,23 @@ void gameControl(Alien &player, Board &playingBoard){
 
     if(userInput == "up" || "down" || "left" || "right"){
         player.move(userInput, playingBoard);
-    }else if(userInput == "arrow"){
-        
-    }else if(userInput == "help"){
-        commandHelp();
-    }else if(userInput == "save"){
-        
-    }else if(userInput == "load"){
-        
-    }else if(userInput == "quit"){
-        
-    }else{
-        cout << "Invalid selection, try again!";
     }
+    if(userInput == "arrow"){
+        cout << "not available";
+    }
+    if(userInput == "help"){
+        commandHelp();
+    }
+    if(userInput == "save"){
+        
+    }
+    if(userInput == "load"){
+        
+    }
+    if(userInput == "quit"){
+        exit(0);
+    }
+
 }
 
 
