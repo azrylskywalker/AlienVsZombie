@@ -126,6 +126,32 @@ public:
         return (x > 0 && x <= column_ && y > 0 && y <= row_);
     }
 
+    void arrowDirection(){
+        int row, column;
+        string direction;
+        char oldDirection, newDirection;
+
+        cout << "Enter row, column, and direction: ";
+        cin >> row >> column >> direction;
+
+        oldDirection = getObject(column, row);
+
+        if (direction == "right"){
+            newDirection = '>';
+        }else if(direction == "left"){
+            newDirection = '<';
+        }else if(direction == "up"){
+            newDirection = '^';
+        }else if(direction == "down"){
+            newDirection = 'v';
+        }
+
+        setObject(column, row, newDirection);
+
+        cout << "Arrow " << oldDirection << " is switched to " << newDirection << ".\n";
+        system("pause");
+    }
+
     
 };
 
@@ -170,10 +196,18 @@ public:
         }
     }
 
-    void moveStep(int &oldPosX, int &oldPosY, Board &playingBoard){
+    void moveStep(int &oldPosX, int &oldPosY, int &newPosX, int &newPosY, Board &playingBoard){
+        
+        char obj = playingBoard.getObject(newPosX, newPosY);
+        
         playingBoard.setObject(x_, y_, heading_);
         playingBoard.setObject(oldPosX, oldPosY, trail_);
         playingBoard.display();
+
+        if (obj == '>' || '<' || '^' || 'v')
+        {
+            moveArrow(playingBoard, obj);
+        }
     }
 
     void moveUp(Board &playingBoard){
@@ -185,7 +219,7 @@ public:
 
             if (turns_){
                 y_++;
-                moveStep(oldPosX, oldPosY, playingBoard);
+                moveStep(oldPosX, oldPosY,newposX, newPosY, playingBoard);
             }
         }
     }
@@ -199,7 +233,7 @@ public:
 
             if (turns_){
                 y_--;
-                moveStep(oldPosX, oldPosY, playingBoard);
+                moveStep(oldPosX, oldPosY, newposX, newPosY, playingBoard);
             }
         }
     }
@@ -213,7 +247,7 @@ public:
             
             if(turns_){
                 x_--;
-                moveStep(oldPosX, oldPosY, playingBoard);
+                moveStep(oldPosX, oldPosY, newposX, newPosY, playingBoard);
             }
         }
     }
@@ -227,7 +261,7 @@ public:
 
             if(turns_){
                 x_++;
-                moveStep(oldPosX, oldPosY, playingBoard);
+                moveStep(oldPosX, oldPosY, newposX, newPosY, playingBoard);
             }
         }
     }
@@ -241,9 +275,9 @@ public:
             rockObstacles(playingBoard, newposX, newPosY);
         }else if(!playingBoard.isInsideMap(newposX, newPosY)){
             borderObstacles();
-        }else if (playingBoard.getObject(x_, y_+1) == '>' || '<' || '^' || 'v'){
-            moveArrow(playingBoard, newposX, newPosY);
-        }else if(isdigit(playingBoard.getObject(x_, y_+1))){
+        }else if ((playingBoard.getObject(newposX, newPosY) == '>') || (playingBoard.getObject(newposX, newPosY) == '<') || playingBoard.getObject(newposX, newPosY) == '^' || playingBoard.getObject(newposX, newPosY) == 'v'){
+            arrowObstacles();
+        }else if(isdigit(playingBoard.getObject(newposX, newPosY))){
             attack(playingBoard, newposX, newPosY);
         }
     }
@@ -302,14 +336,17 @@ public:
         turns_ = 0;
     }
 
-    void moveArrow(Board &playingBoard, int &newX, int &newY){
+    void arrowObstacles(){
         cout << "Alien finds an arrow\n";
         cout << "Alien's attack is increase by 20\n";
 
         attack_ += 20;
 
-        char arrowObj = playingBoard.getObject(newX, newY);
+        system("pause");
+    }
 
+    void moveArrow(Board &playingBoard, const char &arrowObj){
+        
         switch (arrowObj)
         {
         case '>':
@@ -481,7 +518,7 @@ void gameControl(Alien &player, Board &playingBoard){
         player.move(userInput, playingBoard);
     }
     if(userInput == "arrow"){
-        cout << "not available";
+        playingBoard.arrowDirection();
     }
     if(userInput == "help"){
         commandHelp();
