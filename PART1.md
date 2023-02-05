@@ -2,7 +2,7 @@
 
 ## Video Demo
 
-Please provide the YouTube link to your [Video Demo](https://youtube.com).
+Please provide the YouTube link to your [Video Demo](https://youtu.be/cZKsaPwmXac).
 
 ## Minimum Requirements
 
@@ -10,16 +10,17 @@ Please provide the YouTube link to your [Video Demo](https://youtube.com).
 
 List all the features completed.
 
-1. Cool Feature #1
-2. Cool Feature #2
-3. *add more*
+1. Showing the main screen of the game.
+2. Display and allowing user to change the settings.
+3. Moving the Alien and leaving the trail behind.
 
 ### To Do
 
-List all the features not yet done. Remove this section if there is no incomplete requirements.
+List all the features not yet done.
 
-1. Cool Feature #1
-2. *add more*
+1. Let the Alien interact with objects on the board.
+2. Zombies.
+3. Save and load game.
 
 ## Additional Features
 
@@ -31,20 +32,17 @@ List down the contribution of each group members.
 
 For example:
 
-### Tony Stark
+### Aisyah
 
 1. Randomly generate game board.
-2. *add more*
 
-### Steve Rogers
+### Alia
 
 1. Zombie movement and attack behaviour.
-2. *add more*
 
-### Dr. Strange
+### Azryl
 
-1. Implement all game objects.
-2. *add more*
+1. Game objects and their movement
 
 ## Problems Encountered & Solutions
 
