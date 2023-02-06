@@ -14,7 +14,7 @@
 #include <random>
 #include <iomanip>
 
-
+using namespace std;
 
 
 class Board{
