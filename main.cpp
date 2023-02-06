@@ -33,8 +33,8 @@ public:
         row_ = boardRows;
         column_ = boardColumns;
 
-        char objects[] = {'h', 'p', 'r', '>', '<', '^', 'v', ' ', ' ', ' '};
-        int noOfObjects = 10;
+        char objects[] = {'h', 'p', 'r', '>', '<', '^', 'v', ' ', ' ', ' ', ' ', ' '};
+        int noOfObjects = 12;
 
         static random_device device;
         uniform_int_distribution<int> random(0, noOfObjects-1);
@@ -298,8 +298,8 @@ public:
     void rockObstacles(Board &playingBoard, int &x, int y){
         cout << "Alien stumbles upon a rock\n";
 
-        char objects[] = {'h', 'p', ' ', '>', '<', '^', 'v', ' ', ' ', ' '};
-        int noOfObjects = 10;
+        char objects[] = {'h', 'p', ' ', '>', '<', '^', 'v', ' ', ' ', ' ', ' ', ' '};
+        int noOfObjects = 12;
 
         static random_device device;
         uniform_int_distribution<int> random(0, noOfObjects-1);
@@ -375,6 +375,14 @@ private:
 public:
     Zombie(){};
 
+    int getX() const{
+        return x_;
+    }
+
+    int getY() const{
+        return y_;
+    }
+
     //TODO : getY(), getX(), move(), and else
 };
 
@@ -406,6 +414,8 @@ int main(){
     switch (choice)
     {
     case '1':
+        showGameSettings(numOfColumns, numOfRows, numOfZombies);
+        changeGameSettings(numOfColumns, numOfRows, numOfZombies);
         startGame(numOfColumns, numOfRows, numOfZombies);
         break;
     case '2':
@@ -445,7 +455,7 @@ void displayMenu(){
 
 void showGameSettings(const int &rows, const int &columns, const int &zombies){
 
-    cout << "Game Settings\n";
+    cout << "\nGame Settings\n";
     cout << "----------------\n";
 
     cout << "Board Rows : " << rows << "\n";
@@ -459,8 +469,8 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
     switch (changeSettings)
     {
     case 'y':
-        cout << "not yet implement ";
-        break;
+        void changeGameSettings(int &rows, int &columns, int &zombies);
+        return;
     case 'n':
         break;
     default:
@@ -470,15 +480,15 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
 
 void changeGameSettings(int &rows, int &columns, int &zombies){
     cout << "Board Settings\n";
-    cout << "------------------";
+    cout << "------------------\n";
 
     cout << "Enter rows => ";
     cin >> rows;
     cout << "Enter columns => ";
     cin >> columns;
 
-    cout << "Zombie Settings\n";
-    cout << "------------------";
+    cout << "\nZombie Settings\n";
+    cout << "------------------\n";
 
     cout << "Enter number of zombies => ";
     cin >> zombies;
