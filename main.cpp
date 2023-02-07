@@ -395,6 +395,9 @@ public:
     }
 
     void zombiePos(Board &playingBoard, int &zombies){
+        
+        x_ = playingBoard.getColumn();
+        y_ = playingBoard.getRow();
 
         char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
@@ -436,15 +439,11 @@ int main(){
     {
     case '1':
         showGameSettings(numOfColumns, numOfRows, numOfZombies);
-        changeGameSettings(numOfColumns, numOfRows, numOfZombies);
         startGame(numOfColumns, numOfRows, numOfZombies, zombies);
         break;
     case '2':
         //create a load game function
 
-        break;
-    case '3':
-        showGameSettings(numOfRows, numOfColumns, numOfZombies);
         break;
     case 'Q':
         done = true;
@@ -465,8 +464,6 @@ void displayMenu(){
     cout << "| Select:                                     |" << endl;
     cout << "|    1 => New Game                            |" << endl;
     cout << "|    2 => Load Game                           |" << endl;
-    cout << "|---------------------------------------------|" << endl;
-    cout << "|    3 => Settings                            |" << endl;
     cout << "|---------------------------------------------|" << endl;
     cout << "|    Q => Quit                                |" << endl;
     cout << "+---------------------------------------------+" << endl;
@@ -490,16 +487,18 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
     switch (changeSettings)
     {
     case 'y':
-        void changeGameSettings(int &rows, int &columns, int &zombies);
+        int rows, columns, zombies;
+        changeGameSettings(rows, columns, zombies);
         return;
     case 'n':
-        break;
+        return;
     default:
         cout << "Invalid selection, try again!";
     }
 }
 
 void changeGameSettings(int &rows, int &columns, int &zombies){
+    //system("cls");
     cout << "Board Settings\n";
     cout << "------------------\n";
 
