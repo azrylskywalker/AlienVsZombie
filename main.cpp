@@ -384,9 +384,9 @@ public:
         return y_;
     }
 
-    void zombieStatus(int &zombies){
+    void zombieStatus(int &numOfZombies){
 
-        for(int x=1; x<=zombies; x++){
+        for(int x=1; x<=numOfZombies; x++){
             range_ = 1 + (rand() % 5);
             life_ = 100 + (rand() % 201);
             attack_ = 5 + (rand() % 30);
@@ -394,14 +394,19 @@ public:
         };
     }
 
-    void zombiePos(Board &playingBoard, int &zombies){
+    void zombiePos(Board &playingBoard, const int &numOfZombies){
         
-        x_ = playingBoard.getColumn();
-        y_ = playingBoard.getRow();
+        //x_ = playingBoard.getColumn();
+        //y_ = playingBoard.getRow();
 
         char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        static random_device random;
+        uniform_int_distribution<int> column(0, playingBoard.getColumn()-1);
+        uniform_int_distribution<int> row(0, playingBoard.getRow()-1);
+        for(int x=0; x<numOfZombies; x++){
+            x_ = column(random);
+            y_ = row(random);
 
-        for(int x=0; x<zombies; x++){
             playingBoard.setObject(x_, y_, zombieNum_[x]);
         };
     }
@@ -412,7 +417,7 @@ public:
 void displayMenu();
 void showGameSettings(const int &rows, const int &columns, const int &zombies);
 void changeGameSettings(int &rows, int &columns, int &zombies);
-void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies, int &zombies);
+void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies);
 void gameDashboard();
 void gameControl(Alien &player, Board &playingBoard);
 void commandHelp();
@@ -426,7 +431,7 @@ int main(){
     cout << "Let's Get Started!" << endl;
 
     char choice;
-    int numOfRows{3}, numOfColumns{19}, numOfZombies{1}, zombies;
+    int numOfRows{3}, numOfColumns{19}, numOfZombies{1};
     bool done{0};
     Alien player;
     Zombie bots;
@@ -439,7 +444,7 @@ int main(){
     {
     case '1':
         showGameSettings(numOfColumns, numOfRows, numOfZombies);
-        startGame(numOfColumns, numOfRows, numOfZombies, zombies);
+        startGame(numOfColumns, numOfRows, numOfZombies);
         break;
     case '2':
         //create a load game function
@@ -457,7 +462,7 @@ int main(){
 }
 
 void displayMenu(){
-    system("cls");
+    //system("cls");
     cout << "+---------------------------------------------+" << endl;
     cout << "|               ALIEN VS ZOMBIE               |" << endl;
     cout << "|=============================================|" << endl;
@@ -515,14 +520,14 @@ void changeGameSettings(int &rows, int &columns, int &zombies){
 }
 
 
-void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies, int &zombies){
+void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies){
     Board playingBoard = Board(boardColumns, boardRows);
     
     Alien player;
     player.initPos(playingBoard);
 
     Zombie bots;
-    bots.zombiePos(playingBoard, zombies);
+    bots.zombiePos(playingBoard, numOfZombies);
 
     while (true){
         
