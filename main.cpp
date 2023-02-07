@@ -436,15 +436,11 @@ int main(){
     {
     case '1':
         showGameSettings(numOfColumns, numOfRows, numOfZombies);
-        changeGameSettings(numOfColumns, numOfRows, numOfZombies);
         startGame(numOfColumns, numOfRows, numOfZombies, zombies);
         break;
     case '2':
         //create a load game function
 
-        break;
-    case '3':
-        showGameSettings(numOfRows, numOfColumns, numOfZombies);
         break;
     case 'Q':
         done = true;
@@ -465,8 +461,6 @@ void displayMenu(){
     cout << "| Select:                                     |" << endl;
     cout << "|    1 => New Game                            |" << endl;
     cout << "|    2 => Load Game                           |" << endl;
-    cout << "|---------------------------------------------|" << endl;
-    cout << "|    3 => Settings                            |" << endl;
     cout << "|---------------------------------------------|" << endl;
     cout << "|    Q => Quit                                |" << endl;
     cout << "+---------------------------------------------+" << endl;
@@ -493,6 +487,7 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
         void changeGameSettings(int &rows, int &columns, int &zombies);
         return;
     case 'n':
+        cout << "\nGame setting is set at default.\n";
         break;
     default:
         cout << "Invalid selection, try again!";
@@ -500,13 +495,15 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
 }
 
 void changeGameSettings(int &rows, int &columns, int &zombies){
-    cout << "Board Settings\n";
+    cout << "\nBoard Settings\n";
     cout << "------------------\n";
 
     cout << "Enter rows => ";
     cin >> rows;
+    
     cout << "Enter columns => ";
     cin >> columns;
+
 
     cout << "\nZombie Settings\n";
     cout << "------------------\n";
