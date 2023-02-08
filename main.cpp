@@ -373,6 +373,8 @@ public:
 class Zombie{
 private:
     int life_, attack_, range_, x_, y_;
+    char zombie_;
+    bool turns_{0};
 public:
     Zombie(){};
 
@@ -409,6 +411,83 @@ public:
 
             playingBoard.setObject(x_, y_, zombieNum_[x]);
         };
+    }
+
+    void zombieMainMove(Board &playingBoard, const int &numOfZombies){
+    if (turns_){
+        for(int x=0; x<numOfZombies; x++){
+            zombieMove(playingBoard);
+        }
+        turns_ = 1;
+    }
+
+    }
+    void zombieMove(Board &playingBoard ){
+        
+        int noOfMoves = 4;
+        char zombie_;
+        static random_device device;
+        uniform_int_distribution<int> random(0, noOfMoves-1);
+
+        int moves = random(device);
+
+        switch (moves){
+            case 1:
+            zombieUp(playingBoard);
+            break;
+
+            case 2:
+            zombieDown(playingBoard);
+            break;
+
+            case 3:
+            zombieLeft(playingBoard);
+            break;
+
+            case 4:
+            zombieRight(playingBoard);
+            break;
+        }
+    }
+
+    void zombieUp(Board &playingBoard){
+        int oldZomPosX {x_}, oldZomPosY {y_};
+        int newZomPosX {x_}, newZomPosY {y_ + 1};
+            if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_){
+                cout << "Zombie " << zombie_ << " moves up.\n";
+                system("pause");
+                playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            };
+    }
+
+    void zombieDown(Board &playingBoard){
+        int oldZomPosX {x_}, oldZomPosY {y_};
+        int newZomPosX {x_}, newZomPosY {y_ - 1};
+            if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_){
+                cout << "Zombie " << zombie_ << " moves down.\n";
+                system("pause");
+                playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            };
+    }
+
+    void zombieLeft(Board &playingBoard){
+        int oldZomPosX {x_}, oldZomPosY {y_};
+        int newZomPosX {x_ - 1}, newZomPosY {y_};
+            if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_){
+                cout << "Zombie " << zombie_ << " moves left.\n";
+                system("pause");
+                playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            };
+    }
+
+    void zombieRight(Board &playingBoard){
+        int oldZomPosX {x_}, oldZomPosY {y_};
+        int newZomPosX {x_ + 1}, newZomPosY {y_};
+            if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_){
+                cout << "Zombie " << zombie_ << " moves right.\n";
+                system("pause");
+                playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            };
     }
 
     //TODO : getY(), getX(), move(), and else
@@ -525,7 +604,7 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
         playingBoard.display();
          //gameDashboard()
         gameControl(player, playingBoard);
-
+        bots.zombieMainMove(playingBoard, numOfZombies);
     }
     
 }
