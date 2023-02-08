@@ -37,17 +37,17 @@ public:
         char objects[] = {'h', 'p', 'r', '>', '<', '^', 'v', ' ', ' ', ' ', ' ', ' '};
         int noOfObjects = 12;
 
-        static random_device device;
-        uniform_int_distribution<int> random(0, noOfObjects-1);
-
         boardsize_.resize(row_);
-        for (int i = 0; i < row_; ++i){
+        for (int i = 0; i < row_; ++i)
+        {
             boardsize_[i].resize(column_);
         }
 
-        for (int i = 0; i < row_; ++i){
-            for (int j = 0; j < column_; ++j){
-                int objNo = random(device);
+        for (int i = 0; i < row_; ++i)
+        {
+            for (int j = 0; j < column_; ++j)
+            {
+                int objNo = rand() % noOfObjects;
                 boardsize_[i][j] = objects[objNo];
             }
         }
@@ -395,15 +395,15 @@ public:
     }
 
     void zombiePos(Board &playingBoard, const int &numOfZombies){
-        
-        //x_ = playingBoard.getColumn();
-        //y_ = playingBoard.getRow();
 
         char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
         static random_device random;
         uniform_int_distribution<int> column(0, playingBoard.getColumn()-1);
         uniform_int_distribution<int> row(0, playingBoard.getRow()-1);
+
         for(int x=0; x<numOfZombies; x++){
+
             x_ = column(random);
             y_ = row(random);
 
@@ -415,8 +415,7 @@ public:
 };
 
 void displayMenu();
-void showGameSettings(const int &rows, const int &columns, const int &zombies);
-void changeGameSettings(int &rows, int &columns, int &zombies);
+void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies);
 void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies);
 void gameDashboard();
 void gameControl(Alien &player, Board &playingBoard);
@@ -431,7 +430,7 @@ int main(){
     cout << "Let's Get Started!" << endl;
 
     char choice;
-    int numOfRows{3}, numOfColumns{19}, numOfZombies{1};
+    int numOfRows{19}, numOfColumns{3}, numOfZombies{1};
     bool done{0};
     Alien player;
     Zombie bots;
@@ -443,9 +442,28 @@ int main(){
     switch (choice)
     {
     case '1':
-        showGameSettings(numOfColumns, numOfRows, numOfZombies);
-        startGame(numOfColumns, numOfRows, numOfZombies);
-        break;
+        cout << "\nGame Settings\n";
+        cout << "----------------\n";
+
+        cout << "Board Columns : " << numOfRows << "\n";
+        cout << "Board Rows : " << numOfColumns << "\n";
+        cout << "Zombie Count : " << numOfZombies << "\n\n";
+
+        char changeSettings;
+
+        cout << "Do you wish to change the game settings? (y/n) => ";
+        cin >> changeSettings;
+        switch (changeSettings)
+        {
+        case 'y':
+            changeGameSettings(numOfRows, numOfColumns, numOfZombies);
+            startGame(numOfRows, numOfColumns, numOfZombies);
+        case 'n':
+            startGame(numOfRows, numOfColumns, numOfZombies);
+        default:
+            cout << "Invalid selection, try again!";
+        }
+
     case '2':
         //create a load game function
 
@@ -476,49 +494,22 @@ void displayMenu(){
     cout << "Choice => ";
 }
 
-void showGameSettings(const int &rows, const int &columns, const int &zombies){
-
-    cout << "\nGame Settings\n";
-    cout << "----------------\n";
-
-    cout << "Board Rows : " << rows << "\n";
-    cout << "Board Columns : " << columns << "\n";
-    cout << "Zombie Count : " << zombies << "\n\n";
-
-    char changeSettings;
-
-    cout << "Do you wish to change the game settings? (y/n) => ";
-    cin >> changeSettings;
-    switch (changeSettings)
-    {
-    case 'y':
-        int rows, columns, zombies;
-        changeGameSettings(rows, columns, zombies);
-        return;
-    case 'n':
-        return;
-    default:
-        cout << "Invalid selection, try again!";
-    }
-}
-
-void changeGameSettings(int &rows, int &columns, int &zombies){
+void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies){
     //system("cls");
     cout << "Board Settings\n";
     cout << "------------------\n";
 
-    cout << "Enter rows => ";
-    cin >> rows;
     cout << "Enter columns => ";
-    cin >> columns;
+    cin >> boardRows;
+    cout << "Enter rows => ";
+    cin >> boardColumns;
 
     cout << "\nZombie Settings\n";
     cout << "------------------\n";
 
     cout << "Enter number of zombies => ";
-    cin >> zombies;
+    cin >> numOfZombies;
 }
-
 
 void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies){
     Board playingBoard = Board(boardColumns, boardRows);
@@ -539,9 +530,6 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
     
 }
    
-
-
-
 void gameDashboard(){
     // This function display the status of entity on the board
 
@@ -572,8 +560,6 @@ void gameControl(Alien &player, Board &playingBoard){
     }
 
 }
-
-
 
 void commandHelp(){
     cout << "Commands\n";
