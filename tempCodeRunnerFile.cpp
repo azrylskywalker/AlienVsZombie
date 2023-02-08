@@ -1,1 +1,1 @@
-heading_
+Game setting is set at default.

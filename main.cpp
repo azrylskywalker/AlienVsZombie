@@ -115,7 +115,6 @@ public:
     }
 
     char getObject(int x, int y) const{
-
         return boardsize_[-(y - row_)][x - 1];
     }
 
@@ -149,7 +148,7 @@ public:
 
         setObject(column, row, newDirection);
 
-        cout << "Arrow " << oldDirection << " is switched to " << newDirection << ".\n";
+        cout << "\nArrow " << oldDirection << " is switched to " << newDirection << ".\n\n";
         system("pause");
     }
 
@@ -285,9 +284,10 @@ public:
 
     void healthObstacles(){
         cout << "Alien finds a health pack.\n";
-        cout << "Alien's life is increased by 20\n";
+        cout << "Alien's life is increased by 20\n\n";
 
         life_ += 20;
+        cout << "Alien: \nLife: " << life_ << " Attack: " << attack_<< "\n\n";
 
         system("pause");
     }
@@ -309,19 +309,19 @@ public:
 
         switch (newObj){
         case 'h':
-            cout << "Alien discovers a health pack beneath the rock.\n";
+            cout << "Alien discovers a health pack beneath the rock.\n\n";
             break;
         case 'p':
-            cout << "Alien discovers a pod beneath the rock.\n";
+            cout << "Alien discovers a pod beneath the rock.\n\n";
             break;
         case '>':
         case '<':
         case '^':
         case 'v':
-            cout << "Alien discovers an arrow beneath the rock.\n";
+            cout << "Alien discovers an arrow beneath the rock.\n\n";
             break;
         default:
-            cout << "Alien discovers nothing beneath the rock.\n";
+            cout << "Alien discovers nothing beneath the rock.\n\n";
             break;
         }
         playingBoard.setObject(x, y, newObj);
@@ -331,7 +331,7 @@ public:
     }
 
     void borderObstacles(){
-        cout << "Alien hits a border.\n";
+        cout << "Alien hits a border.\n\n";
         system("pause");
 
         turns_ = 0;
@@ -339,9 +339,10 @@ public:
 
     void arrowObstacles(){
         cout << "Alien finds an arrow\n";
-        cout << "Alien's attack is increase by 20\n";
+        cout << "Alien's attack is increase by 20\n\n";
 
         attack_ += 20;
+        cout << "Alien: \nLife: " << life_ << " Attack: " << attack_<<"\n\n";
 
         system("pause");
     }
@@ -403,7 +404,8 @@ public:
         static random_device random;
         uniform_int_distribution<int> column(0, playingBoard.getColumn()-1);
         uniform_int_distribution<int> row(0, playingBoard.getRow()-1);
-        for(int x=0; x<numOfZombies; x++){
+
+        for(int x=0; x<numOfZombies; x++){ 
             x_ = column(random);
             y_ = row(random);
 
@@ -427,8 +429,8 @@ void commandHelp();
 
 
 int main(){
-    cout << "Assignment (Part 1)" << endl;
-    cout << "Let's Get Started!" << endl;
+    cout << "\nAssignment (Part 1)" << endl;
+    cout << "\nLet's Get Started!\n" << endl;
 
     char choice;
     int numOfRows{3}, numOfColumns{19}, numOfZombies{1};
@@ -439,7 +441,6 @@ int main(){
 
     displayMenu();
     cin >> choice;
-    
     switch (choice)
     {
     case '1':
@@ -448,15 +449,14 @@ int main(){
         break;
     case '2':
         //create a load game function
-
         break;
     case 'Q':
         done = true;
         break;
     default:
-        cout << "Invalid selection, try again!" << endl;
+        cout << "\nInvalid selection, try again!" << endl;
         cout << endl;
-        break;
+        displayMenu();
     }
     system("pause");
 }
@@ -501,20 +501,30 @@ void showGameSettings(const int &rows, const int &columns, const int &zombies){
         return;
     default:
         cout << "Invalid selection, try again!";
+        showGameSettings(rows, columns, zombies);
     }
 }
 
 void changeGameSettings(int &rows, int &columns, int &zombies){
-    cout << "\nBoard Settings\n";
     //system("cls");
-    cout << "Board Settings\n";
+    cout << "\nBoard Settings\n";
     cout << "------------------\n";
 
+    rowsSettings:
     cout << "Enter rows => ";
     cin >> rows;
+    if (rows%2 == 0){
+        cout << "\nERROR! Please make sure the number entered is odd.\n\n";
+        goto rowsSettings;
+    }
     
+    columnsSettings:
     cout << "Enter columns => ";
     cin >> columns;
+    if (columns%2 == 0){
+        cout << "\nERROR! Please make sure the number entered is odd.\n\n";
+        goto columnsSettings;
+    }
 
 
     cout << "\nZombie Settings\n";
@@ -522,6 +532,7 @@ void changeGameSettings(int &rows, int &columns, int &zombies){
 
     cout << "Enter number of zombies => ";
     cin >> zombies;
+    cout << endl;
 }
 
 
@@ -556,6 +567,7 @@ void gameControl(Alien &player, Board &playingBoard){
     string userInput;
     cout << "Command> ";
     cin >> userInput;
+    cout << "\n";
 
     if(userInput == "up" || "down" || "left" || "right"){
         player.move(userInput, playingBoard);
