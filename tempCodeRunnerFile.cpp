@@ -1,1 +1,1 @@
-Game setting is set at default.
+m
