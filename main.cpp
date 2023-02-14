@@ -173,6 +173,16 @@ public:
         cout << "\nArrow " << oldDirection << " is switched to " << newDirection << ".\n\n";
         system("pause");
     }
+
+    char randomObj(){
+        char objects[] = {'h', 'p', 'r', '>', '<', '^', 'v', ' ', ' ', ' ', ' ', ' '};
+        int noObj = 12;
+
+        static random_device random;
+        uniform_int_distribution<int> obj(0, noObj);
+
+        return objects[obj(random)];
+    }
 };
 
 class Alien
@@ -198,6 +208,11 @@ public:
     void alienStatus()
     {
         cout << "Alien: Life: " << life_ << "Attack: " << attack_;
+    }
+
+    void lifeUpdate(int &damage)
+    {
+        life_ -= damage;
     }
 
     void initPos(Board &playingBoard)
@@ -235,7 +250,6 @@ public:
 
         playingBoard.setObject(x_, y_, heading_);
         playingBoard.setObject(oldPosX, oldPosY, trail_);
-        playingBoard.display();
 
         if (obj == '>' || '<' || '^' || 'v')
         {
@@ -443,9 +457,10 @@ public:
 class Zombie
 {
 private:
-    int life_, attack_, range_, x_, y_;
+    int life_, attack_, range_, x_, y_, zombieIndex_;
     char zombie_;
     bool turns_{0};
+    vector<int> xCoord_, yCoord_;
 
 public:
     Zombie(){};
@@ -463,6 +478,29 @@ public:
     int zombieTurns(){
         return turns_ = 1;
         
+    }
+
+    void setPosX(const int &x){ 
+        
+        xCoord_.push_back(x);
+    }
+
+    void getPosX(){
+        x_ = xCoord_[zombieIndex_];
+    }
+
+    void setPosY(const int &y){ 
+        
+        yCoord_.push_back(y);
+    }
+
+    void getPosY(){
+        y_ = yCoord_[zombieIndex_];
+    }
+
+    int getAttack()
+    {
+        return attack_;
     }
 
     void zombieStatus(int &numOfZombies)
@@ -492,11 +530,21 @@ public:
             x_ = column(random);
             y_ = row(random);
 
+            setPosX(x_);
+            setPosY(y_);
+
+            //check the box first bfr place on board
+
             playingBoard.setObject(x_, y_, zombieNum_[x]);
         };
     }
 
-    void zombieMainMove(Board &playingBoard, const int &numOfZombies)
+    void savePos(){
+            xCoord_[zombieIndex_] = x_;
+            yCoord_[zombieIndex_] = y_;
+    }
+
+    void zombieMainMove(Board &playingBoard, Alien &player, const int &numOfZombies)
     {
         if (turns_)
 
@@ -505,8 +553,15 @@ public:
                  char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
                  zombie_ = zombieNum_[x];
 
+                 zombieIndex_ = x;
+
+                 getPosX();
+                 getPosY();
+
+                 //get obstacles. if obstacle find empty
 
                 zombieMove(playingBoard);
+                zombieAttack(playingBoard, player);
             }
             turns_ = 1;
     }
@@ -545,12 +600,17 @@ public:
         int oldZomPosX{x_}, oldZomPosY{y_};
         int newZomPosX{x_}, newZomPosY{y_ + 1};
 
+        char newObj = playingBoard.randomObj();
+
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
             cout << "Zombie " << zombie_ << " moves up.\n";
 
             system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
+
+            savePos();
         }
 
         else{
@@ -564,12 +624,17 @@ public:
         int oldZomPosX{x_}, oldZomPosY{y_};
         int newZomPosX{x_}, newZomPosY{y_ - 1};
 
+        char newObj = playingBoard.randomObj();
+
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
             cout << "Zombie " << zombie_ << " moves down.\n";
 
             system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
+
+            savePos();
         }
 
          else{
@@ -582,12 +647,18 @@ public:
     {
         int oldZomPosX{x_}, oldZomPosY{y_};
         int newZomPosX{x_ - 1}, newZomPosY{y_};
+
+        char newObj = playingBoard.randomObj();
+
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
             cout << "Zombie " << zombie_ << " moves left.\n";
 
             system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
+
+            savePos();
         }
 
          else{
@@ -600,12 +671,18 @@ public:
     {
         int oldZomPosX{x_}, oldZomPosY{y_};
         int newZomPosX{x_ + 1}, newZomPosY{y_};
+
+        char newObj = playingBoard.randomObj();
+
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ || ' ')
         {
             cout << "Zombie " << zombie_ << " moves right.\n";
 
             system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
+            playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
+
+            savePos();
         }
 
          else{
@@ -614,8 +691,29 @@ public:
         
     }
 
-    // TODO : getY(), getX(), move(), and else
-};
+    void zombieAttack(Board &playingBoard, Alien &player){
+
+        for(int i = 1; i<=range_;i++)
+        {
+        int newZomPosX{x_}, newZomPosY{y_};
+        int attackValue = getAttack();
+
+        if (playingBoard.getObject(x_ + i, y_) == 'A' || playingBoard.getObject(x_ - i, y_) == 'A' || playingBoard.getObject(x_, y_+i) == 'A' || playingBoard.getObject(x_ , y_-i) == 'A')
+        {
+            player.lifeUpdate(attackValue);
+            cout << "\nZombie" << zombie_ <<  "has attacked Alien\n" ; 
+        }
+
+        else
+        {
+            cout << "\nZombie " << zombie_ << "failed to attack\n";
+        }
+        } 
+        
+    }
+    }
+
+;
 
 void displayMenu();
 void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bool &settingsDone);
@@ -753,7 +851,7 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
         gameControl(player, playingBoard);
         playingBoard.display();
         bots.zombieTurns();
-        bots.zombieMainMove(playingBoard, numOfZombies);
+        bots.zombieMainMove(playingBoard, player, numOfZombies);
 
     }
 }
