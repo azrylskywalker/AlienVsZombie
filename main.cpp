@@ -499,7 +499,7 @@ public:
     void zombieMainMove(Board &playingBoard, const int &numOfZombies)
     {
         if (turns_)
-        
+
             for (int x = 0; x < numOfZombies; x++)
             {
                  char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
