@@ -207,7 +207,7 @@ public:
 
     void alienStatus()
     {
-        cout << "Alien: Life: " << life_ << "Attack: " << attack_ << endl;
+        cout << "Alien: Life: " << life_ << " Attack: " << attack_ << endl;
     }
 
     void lifeUpdate(int &damage)
@@ -218,7 +218,7 @@ public:
     void initPos(Board &playingBoard)
     {
 
-        x_ = playingBoard.getColumn() / 2;
+        x_ = playingBoard.getColumn() / 2 + 1;
         y_ = (playingBoard.getRow() / 2) + 1;
 
         playingBoard.setObject(x_, y_, heading_);
@@ -509,7 +509,6 @@ public:
 
     void zombieStatus(int &numOfZombies)
     {
-
         for (int x = 1; x <= numOfZombies; x++)
         {
             range_ = 1 + (rand() % 5);
@@ -553,7 +552,7 @@ public:
         yCoord_[zombieIndex_] = y_;
     }
 
-    void zombieMainMove(Board &playingBoard, Alien &player, const int &numOfZombies)
+    void zombieMainMove(Board &playingBoard, Alien &player, Zombie &bots, const int &numOfZombies)
     {
         if (turns_)
         {
@@ -709,10 +708,9 @@ public:
 
     void zombieAttack(Board &playingBoard, Alien &player){
 
-        for(int i = 1; i<=range_; i++)
-        {
         int newZomPosX{x_}, newZomPosY{y_};
         int attackValue = getAttack();
+        int i = range_;
 
         if (playingBoard.getObject(x_ + i, y_) == 'A' || playingBoard.getObject(x_ - i, y_) == 'A' || playingBoard.getObject(x_, y_+i) == 'A' || playingBoard.getObject(x_ , y_-i) == 'A')
         {
@@ -724,8 +722,6 @@ public:
         {
             cout << "\nZombie " << zombie_ << " failed to attack\n";
         }
-
-        } 
         
     }
     }
@@ -865,21 +861,21 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
     {
 
         playingBoard.display();
-        gameDashboard(bots, player);
         gameControl(player, playingBoard);
         playingBoard.display();
         bots.zombieTurns();
-        bots.zombieMainMove(playingBoard, player, numOfZombies);
+        bots.zombieMainMove(playingBoard, player, bots, numOfZombies);
+        gameDashboard(bots, player);
    
     }
 }
 
 void gameDashboard(Zombie &bots, Alien &player)
 {
-    int numOfZombies;
+    int zombieIndex_;
 
     player.alienStatus();
-    bots.zombieStatus(numOfZombies);
+    bots.zombieStatus(zombieIndex_);
     // This function display the status of entity on the board
 }
 
