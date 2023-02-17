@@ -207,12 +207,12 @@ public:
 
     void alienStatus()
     {
-        cout << "Alien: Life: " << life_ << "Attack: " << attack_;
+        cout << "Alien: Life: " << life_ << "Attack: " << attack_ << endl;
     }
 
     void lifeUpdate(int &damage)
     {
-        life_ -= damage;
+        life_ = life_ - damage;
     }
 
     void initPos(Board &playingBoard)
@@ -329,11 +329,11 @@ public:
     {
         if (playingBoard.getObject(newposX, newPosY) == 'h')
         {
-            healthObstacles();
+            healthObstacles(playingBoard);
         }
         else if (playingBoard.getObject(newposX, newPosY) == 'p')
         {
-            podObstacles();
+            podObstacles(playingBoard);
         }
         else if (playingBoard.getObject(newposX, newPosY) == 'r')
         {
@@ -341,23 +341,20 @@ public:
         }
         else if (!playingBoard.isInsideMap(newposX, newPosY))
         {
-            borderObstacles();
+            borderObstacles(playingBoard);
         }
         else if ((playingBoard.getObject(newposX, newPosY) == '>') || (playingBoard.getObject(newposX, newPosY) == '<') || playingBoard.getObject(newposX, newPosY) == '^' || playingBoard.getObject(newposX, newPosY) == 'v')
         {
-            arrowObstacles();
+            arrowObstacles(playingBoard);
         }
         else if (isdigit(playingBoard.getObject(newposX, newPosY)))
         {
             attack(playingBoard, newposX, newPosY);
-        }else if (playingBoard.getObject(newposX,newPosY) == ' '){
-            system("pause");
         }
         
-
     }
 
-    void healthObstacles()
+    void healthObstacles(Board &playingBoard)
     {
         cout << "Alien finds a health pack.\n";
         cout << "Alien's life is increased by 20\n\n";
@@ -365,11 +362,14 @@ public:
         life_ += 20;
         cout << "Alien: \nLife: " << life_ << " Attack: " << attack_ << "\n\n";
 
+        playingBoard.display();
+
         system("pause");
     }
 
-    void podObstacles()
+    void podObstacles(Board &playingBoard)
     {
+        playingBoard.display();
         system("pause");
     }
 
@@ -384,6 +384,8 @@ public:
         uniform_int_distribution<int> random(0, noOfObjects - 1);
 
         char newObj = objects[random(device)];
+
+        playingBoard.display();
 
         switch (newObj)
         {
@@ -409,16 +411,18 @@ public:
         turns_ = 0;
     }
 
-    void borderObstacles()
+    void borderObstacles(Board &playingBoard)
     {
+        playingBoard.display();
         cout << "Alien hits a border.\n\n";
         system("pause");
 
         turns_ = 0;
     }
 
-    void arrowObstacles()
+    void arrowObstacles(Board &playingBoard)
     {
+        playingBoard.display();
         cout << "Alien finds an arrow\n";
         cout << "Alien's attack is increase by 20\n\n";
 
@@ -513,6 +517,7 @@ public:
             attack_ = 5 + (rand() % 30);
             cout << "Zombie " << x << " : Life " << life_ << ", Attack " << attack_ << ", Range " << range_ << endl;
         };
+        cout << endl;
     }
 
     void zombiePos(Board &playingBoard, const int &numOfZombies)
@@ -540,14 +545,18 @@ public:
     }
 
     void savePos(){
-            xCoord_[zombieIndex_] = x_;
-            yCoord_[zombieIndex_] = y_;
+
+        getPosX();
+        getPosY();
+
+        xCoord_[zombieIndex_] = x_;
+        yCoord_[zombieIndex_] = y_;
     }
 
     void zombieMainMove(Board &playingBoard, Alien &player, const int &numOfZombies)
     {
         if (turns_)
-
+        {
             for (int x = 0; x < numOfZombies; x++)
             {
                  char zombieNum_[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
@@ -562,8 +571,11 @@ public:
 
                 zombieMove(playingBoard);
                 zombieAttack(playingBoard, player);
+                playingBoard.display();
             }
             turns_ = 1;
+        }
+
     }
 
 
@@ -607,8 +619,6 @@ public:
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
-            playingBoard.display(); 
-
             cout << "Zombie " << zombie_ << " moves up.\n";
 
             savePos();
@@ -633,8 +643,6 @@ public:
         {
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
-
-            playingBoard.display(); 
 
             cout << "Zombie " << zombie_ << " moves down.\n";
 
@@ -661,8 +669,6 @@ public:
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
-            playingBoard.display(); 
-
             cout << "Zombie " << zombie_ << " moves left.\n";
 
             savePos();
@@ -688,8 +694,6 @@ public:
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
-            playingBoard.display(); 
-
             cout << "Zombie " << zombie_ << " moves right.\n";
 
             savePos();
@@ -705,7 +709,7 @@ public:
 
     void zombieAttack(Board &playingBoard, Alien &player){
 
-        for(int i = 1; i<=range_;i++)
+        for(int i = 1; i<=range_; i++)
         {
         int newZomPosX{x_}, newZomPosY{y_};
         int attackValue = getAttack();
@@ -713,12 +717,12 @@ public:
         if (playingBoard.getObject(x_ + i, y_) == 'A' || playingBoard.getObject(x_ - i, y_) == 'A' || playingBoard.getObject(x_, y_+i) == 'A' || playingBoard.getObject(x_ , y_-i) == 'A')
         {
             player.lifeUpdate(attackValue);
-            cout << "\nZombie" << zombie_ <<  "has attacked Alien\n" ; 
+            cout << "\nZombie" << zombie_ <<  " has attacked Alien\n" ; 
         }
 
         else
         {
-            cout << "\nZombie " << zombie_ << "failed to attack\n";
+            cout << "\nZombie " << zombie_ << " failed to attack\n";
         }
 
         } 
@@ -731,7 +735,7 @@ public:
 void displayMenu();
 void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bool &settingsDone);
 void startGame(const int &boardColumns, const int &boardRows, const int &numOfZombies);
-void gameDashboard();
+void gameDashboard(Zombie &bots, Alien &player);
 void gameControl(Alien &player, Board &playingBoard);
 void commandHelp();
 
@@ -799,6 +803,7 @@ int main()
 void displayMenu()
 {
     // system("cls");
+    cout << endl;
     cout << "+---------------------------------------------+" << endl;
     cout << "|               ALIEN VS ZOMBIE               |" << endl;
     cout << "|=============================================|" << endl;
@@ -818,13 +823,12 @@ void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bo
     cout << "\nBoard Settings\n";
     cout << "------------------\n";
 
-    //r/ows:
+    
     cout << "Enter rows => ";
     cin >> boardColumns;
     cout << endl;
 
 
-    //Columns:
     cout << "Enter columns => ";
     cin >> boardRows;
     cout << endl;
@@ -837,9 +841,10 @@ void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bo
     cin >> numOfZombies;
     cout << endl;
 
-        if(boardColumns%2 == 0 || boardRows%2 == 0){
+    if(boardColumns%2 == 0 || boardRows%2 == 0){
         cout << "\nERROR ! Please make sure user enter an odd number for the rows and columns.\n\n";
-    }else{
+    }
+    else{
         exit = true;
     }
 
@@ -860,16 +865,21 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
     {
 
         playingBoard.display();
-        // gameDashboard()
+        gameDashboard(bots, player);
         gameControl(player, playingBoard);
         playingBoard.display();
         bots.zombieTurns();
         bots.zombieMainMove(playingBoard, player, numOfZombies);
+   
     }
 }
 
-void gameDashboard()
+void gameDashboard(Zombie &bots, Alien &player)
 {
+    int numOfZombies;
+
+    player.alienStatus();
+    bots.zombieStatus(numOfZombies);
     // This function display the status of entity on the board
 }
 
