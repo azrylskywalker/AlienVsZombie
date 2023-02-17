@@ -604,13 +604,16 @@ public:
 
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
-            cout << "Zombie " << zombie_ << " moves up.\n";
-
-            system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
+            playingBoard.display(); 
+
+            cout << "Zombie " << zombie_ << " moves up.\n";
+
             savePos();
+
+            system("pause");
         }
 
         else{
@@ -628,13 +631,16 @@ public:
 
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
-            cout << "Zombie " << zombie_ << " moves down.\n";
-
-            system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
+            playingBoard.display(); 
+
+            cout << "Zombie " << zombie_ << " moves down.\n";
+
             savePos();
+
+            system("pause");
         }
 
          else{
@@ -652,13 +658,16 @@ public:
 
         if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
-            cout << "Zombie " << zombie_ << " moves left.\n";
-
-            system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
+            playingBoard.display(); 
+
+            cout << "Zombie " << zombie_ << " moves left.\n";
+
             savePos();
+
+            system("pause");
         }
 
          else{
@@ -674,15 +683,18 @@ public:
 
         char newObj = playingBoard.randomObj();
 
-        if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ || ' ')
+        if (playingBoard.getObject(newZomPosX, newZomPosY) != 'A' || zombie_ )
         {
-            cout << "Zombie " << zombie_ << " moves right.\n";
-
-            system("pause");
             playingBoard.setObject(newZomPosX, newZomPosY, zombie_);
             playingBoard.setObject(oldZomPosX, oldZomPosY, newObj);
 
+            playingBoard.display(); 
+
+            cout << "Zombie " << zombie_ << " moves right.\n";
+
             savePos();
+
+            system("pause");
         }
 
          else{
@@ -708,6 +720,7 @@ public:
         {
             cout << "\nZombie " << zombie_ << "failed to attack\n";
         }
+
         } 
         
     }
@@ -825,7 +838,7 @@ void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bo
     cout << endl;
 
         if(boardColumns%2 == 0 || boardRows%2 == 0){
-        cout << "\nERROR ! Please make sure user enter an odd number.\n\n";
+        cout << "\nERROR ! Please make sure user enter an odd number for the rows and columns.\n\n";
     }else{
         exit = true;
     }
@@ -852,7 +865,6 @@ void startGame(const int &boardColumns, const int &boardRows, const int &numOfZo
         playingBoard.display();
         bots.zombieTurns();
         bots.zombieMainMove(playingBoard, player, numOfZombies);
-
     }
 }
 
