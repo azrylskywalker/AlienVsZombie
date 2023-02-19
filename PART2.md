@@ -2,13 +2,11 @@
 
 ## Video Demo
 
-[Video Demo]([https://youtube.com).](https://youtu.be/YABIF4gv2K8)
+[Video Demo] (https://youtu.be/YABIF4gv2K8)
 
 ## Minimum Requirements
 
 ### Completed
-
-List all the features completed.
 
 1. Game board with adjustable size and randomised objects.
 2. Alien is able to move and leave trail in its path.
@@ -26,8 +24,6 @@ List all the features completed.
 15. User can quit the game.
 
 ### To Do
-
-List all the features not yet done. Remove this section if there is no incomplete requirements.
 
 1. Alien don't attack when hit zombie.
 2. Save and load.
@@ -49,7 +45,7 @@ For example:
 
 ### Azryl
 
-1. Alien movement.
+1. Alien movements and behaviours.
 2. Implements all game objects.
 
 ### Alia
@@ -58,5 +54,6 @@ For example:
 2. Randomise zombie attributes.
 
 ## Problems Encountered & Solutions
-
-Describe the problems encountered and provide the solutions / plan for the solutions.
+1. Alien cannot attack zombie when it hits zombie. Solution : not found
+2. Randomise zombie attributes. Solution : use the rand() function
+3. Alien cannot move after meeting an arrow. Solution : fix loop 
