@@ -10,16 +10,17 @@ Please provide the YouTube link to your [Video Demo](https://youtube.com).
 
 List all the features completed.
 
-1. Cool Feature #1
-2. Cool Feature #2
-3. *add more*
+1. Game board with adjustable size and randomised objects.
+2. Alien is able to move and leave trail in its path.
+3. Randomised zombie attributes(life, attack and range) and initial position.
+4. 
 
 ### To Do
 
 List all the features not yet done. Remove this section if there is no incomplete requirements.
 
-1. Cool Feature #1
-2. *add more*
+1. Alien don't attack when hit zombie.
+2. Save and load.
 
 ## Additional Features
 
