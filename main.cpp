@@ -513,26 +513,7 @@ public:
         
     }
 
-    void zombieAttack(Board &playingBoard, Alien &player){
-
-        int newZomPosX{x_}, newZomPosY{y_};
-
-        getAttack();
-        int attackValue = attack_;
-        //int i = range_;
-        for(int i = 1; i<range_;i++){
-        if (playingBoard.getObject(x_ + i, y_) == 'A' || playingBoard.getObject(x_ - i, y_) == 'A' || playingBoard.getObject(x_, y_+i) == 'A' || playingBoard.getObject(x_ , y_-i) == 'A')
-            {
-                player.lifeUpdate(attackValue);
-                cout << "\nZombie " << zombie_ <<  " has attacked Alien.\n" ; 
-                break;
-            }else{
-                cout << "\nZombie " << zombie_ << " failed to attack\n";
-                break;
-            }
-        
-        }
-    }
+    void zombieAttack(Board &playingBoard, Alien &player);
 };
 
 class Alien
@@ -857,6 +838,27 @@ public:
 };
 
 
+void Zombie::zombieAttack(Board &playingBoard, Alien &player){
+
+    int newZomPosX{x_}, newZomPosY{y_};
+
+    getAttack();
+    int attackValue = attack_;
+        //int i = range_;
+    for(int i = 1; i<range_;i++){
+        if (playingBoard.getObject(x_ + i, y_) == 'A' || playingBoard.getObject(x_ - i, y_) == 'A' || playingBoard.getObject(x_, y_+i) == 'A' || playingBoard.getObject(x_ , y_-i) == 'A')
+        {
+            player.lifeUpdate(attackValue);
+            cout << "\nZombie " << zombie_ <<  " has attacked Alien.\n" ; 
+            break;
+        }else{
+            cout << "\nZombie " << zombie_ << " failed to attack\n";
+            break;
+        }
+    }
+}
+
+
 
 void displayMenu();
 void changeGameSettings(int &boardRows, int &boardColumns, int &numOfZombies, bool &settingsDone);
@@ -1061,4 +1063,5 @@ void commandHelp()
     cout << "8. load - Load a game\n";
     cout << "9. quit - Quit the game.\n";
 }
+
 
