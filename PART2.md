@@ -2,7 +2,7 @@
 
 ## Video Demo
 
-Please provide the YouTube link to your [Video Demo](https://youtube.com).
+[Video Demo]([https://youtube.com).](https://youtu.be/YABIF4gv2K8)
 
 ## Minimum Requirements
 
@@ -13,7 +13,17 @@ List all the features completed.
 1. Game board with adjustable size and randomised objects.
 2. Alien is able to move and leave trail in its path.
 3. Randomised zombie attributes(life, attack and range) and initial position.
-4. 
+4. Alien is able to move direction upon hitting an arrow.
+5. Direction of arrow can be change.
+6. Alien stop when it hits the border of the game board and rock.
+7. When Alien hit a rock, it checks for random object underneath it.
+8. Alien can inflicts damage on zombie using pod.
+9. Alien life increase when it meet health.
+10. Alien attack increased when it found an arrow.
+11. Zombie can attack alien within its range.
+12. Zombie moves to another box randomly.
+13. User can put multiple zombie in the playing board.
+15. User can quit the game.
 
 ### To Do
 
@@ -32,20 +42,20 @@ List down the contribution of each group members.
 
 For example:
 
-### Tony Stark
+### Aisyah
 
-1. Randomly generate game board.
-2. *add more*
+1. Randomly generate game board and objects.
+2. Zombie initial position and movements.
 
-### Steve Rogers
+### Azryl
 
-1. Zombie movement and attack behaviour.
-2. *add more*
+1. Alien movement.
+2. Implements all game objects.
 
-### Dr. Strange
+### Alia
 
-1. Implement all game objects.
-2. *add more*
+1. Zombie attack.
+2. Randomise zombie attributes.
 
 ## Problems Encountered & Solutions
 
