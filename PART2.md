@@ -34,10 +34,6 @@ Describe the additional features that has been implemented.
 
 ## Contributions
 
-List down the contribution of each group members.
-
-For example:
-
 ### Aisyah
 
 1. Randomly generate game board and objects.
